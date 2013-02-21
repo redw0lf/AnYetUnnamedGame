@@ -45,10 +45,10 @@ public class MazeCell {
         east = null;
         south = null;
         west = null;
-        wallNorth = false;
-        wallNorth = false;
-        wallNorth = false;
-        wallNorth = false;
+        wallNorth = true;
+        wallEast = true;
+        wallSouth = true;
+        wallWest = true;
     }
     public List<MazeCell> getNeighbors() {    
         ArrayList<MazeCell> neighbors = new ArrayList<MazeCell>();

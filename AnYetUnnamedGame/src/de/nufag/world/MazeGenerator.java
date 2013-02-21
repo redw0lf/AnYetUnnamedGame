@@ -29,30 +29,32 @@ public class MazeGenerator {
     
     private static void generateMaze(MazeCell curCell, List<MazeCell> visited)
     {
-        ArrayList<MazeCell> neighbors = new ArrayList<MazeCell>();
+        List<MazeCell> neighbors = curCell.getNeighbors();
         int neighborSize = neighbors.size();
+        //System.out.println(neighborSize);
         for(int i=neighborSize-1;i>=0;i--)
         {
             MazeCell curNeighbor = neighbors.get((int)(i*Math.random()));
-            if (curNeighbor != null && !visited.contains(curNeighbor)) 
+            //System.out.println(curNeighbor.getPosX() + "," + curNeighbor.getPosY());
+            if (curNeighbor != null && !visited.contains(curNeighbor))
             {
                 //detect where the neighbor is
-                if ( curCell.getNorth().equals(curNeighbor))
+                if ( curNeighbor.equals(curCell.getNorth()))
                 {
                     curCell.setWallNorth(false);
                     curNeighbor.setWallSouth(false);
                 }
-                else if ( curCell.getSouth().equals(curNeighbor))
+                else if ( curNeighbor.equals(curCell.getSouth()))
                 {
                     curCell.setWallSouth(false);
                     curNeighbor.setWallNorth(false);
                 }
-                else if ( curCell.getEast().equals(curNeighbor))
+                else if ( curNeighbor.equals(curCell.getEast()))
                 {
                     curCell.setWallEast(false);
                     curNeighbor.setWallWest(false);
                 }
-                else if ( curCell.getWest().equals(curNeighbor))
+                else if ( curNeighbor.equals(curCell.getWest()))
                 {
                     curCell.setWallWest(false);
                     curNeighbor.setWallEast(false);
