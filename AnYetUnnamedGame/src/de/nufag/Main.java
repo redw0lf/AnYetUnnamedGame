@@ -34,7 +34,11 @@ public class Main extends SimpleApplication {
         for (MazeCell mc: maze )
         {
         	//TODO fill this with live
-        	createBox(mc, ColorRGBA.White);
+        	if(mc.isExit()) {
+        		createBox(mc, ColorRGBA.Red);
+        	} else {
+        		createBox(mc, ColorRGBA.White);
+        	}
         }
        
     }  
@@ -52,54 +56,49 @@ public class Main extends SimpleApplication {
     private void createBox(MazeCell mc, ColorRGBA color) {
     	
     	ArrayList<Geometry> linesToAdd = new ArrayList<Geometry>();
-    	Quad q = new Quad(1, 1);
+    	Quad q = new Quad(0.8f, 0.8f);
     	
     	//System.out.println(q.getHeight());
         Geometry geom = new Geometry("Quad", q);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);
         geom.setMaterial(mat);
-        geom.move(mc.getPosX() + 0.33f, mc.getPosY() + 0.33f, 0);
+        geom.move(mc.getPosX()+0.1f, 19-mc.getPosY()+0.1f, 0);
         rootNode.attachChild(geom);
-        if(mc.isWallEast()) {
-        	Quad tmp = new Quad(0.33f,1);
-        	Geometry g = new Geometry("Quad", tmp);
-            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            m.setColor("Color", ColorRGBA.DarkGray);
-            g.setMaterial(m);
-            g.move(mc.getPosX()+1, mc.getPosY(), 0);
-        	linesToAdd.add(g);
-        }
         
-        if(mc.isWallNorth()) {
-        	Quad tmp = new Quad(1,0.33f);
-        	Geometry g = new Geometry("Quad", tmp);
-            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            m.setColor("Color", ColorRGBA.DarkGray);
-            g.setMaterial(m);
-            g.move(mc.getPosX(), mc.getPosY(), 0);
-        	linesToAdd.add(g);
-        }
+    	Quad tmp = new Quad(0.1f,1f);
+    	Geometry g = new Geometry("Quad", tmp);
+        Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        m.setColor("Color", mc.isWallWest() ? ColorRGBA.DarkGray : ColorRGBA.White);
+        g.setMaterial(m);
+        g.move(mc.getPosX(), 19-mc.getPosY(), 0);
+    	linesToAdd.add(g);
         
-        if(mc.isWallSouth()) {
-        	Quad tmp = new Quad(1,0.33f);
-        	Geometry g = new Geometry("Quad", tmp);
-            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            m.setColor("Color", ColorRGBA.DarkGray);
-            g.setMaterial(m);
-            g.move(mc.getPosX(), mc.getPosY()+1, 0);
-        	linesToAdd.add(g);
-        }
         
-        if(mc.isWallWest()) {
-        	Quad tmp = new Quad(0.33f,1);
-        	Geometry g = new Geometry("Quad", tmp);
-            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            m.setColor("Color", ColorRGBA.DarkGray);
-            g.setMaterial(m);
-            g.move(mc.getPosX(), mc.getPosY(), 0);
-        	linesToAdd.add(g);
-        }
+       	Quad tmp2 = new Quad(1f,0.1f);
+        Geometry g2 = new Geometry("Quad", tmp2);
+        Material m2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        m2.setColor("Color", mc.isWallNorth() ? ColorRGBA.DarkGray : ColorRGBA.White);
+        g2.setMaterial(m2);
+        g2.move(mc.getPosX(), 20-mc.getPosY()-0.1f, 0);
+        linesToAdd.add(g2);
+       
+    	Quad tmp3 = new Quad(1f,0.1f);
+    	Geometry g3 = new Geometry("Quad", tmp3);
+        Material m3 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        m3.setColor("Color", mc.isWallSouth() ? ColorRGBA.DarkGray : ColorRGBA.White);
+        g3.setMaterial(m3);
+        g3.move(mc.getPosX(), 20-mc.getPosY()-1f, 0);
+    	linesToAdd.add(g3);
+    
+    	Quad tmp4 = new Quad(0.1f,1f);
+    	Geometry g4 = new Geometry("Quad", tmp4);
+        Material m4 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        m4.setColor("Color", mc.isWallEast() ? ColorRGBA.DarkGray : ColorRGBA.White);
+        g4.setMaterial(m4);
+        g4.move(mc.getPosX()+0.9f, 19-mc.getPosY(), 0);
+    	linesToAdd.add(g4);
+        
         
         for(Geometry l : linesToAdd) {
             rootNode.attachChild(l);
