@@ -31,11 +31,11 @@ public class MazeGenerator {
     {
         List<MazeCell> neighbors = curCell.getNeighbors();
         int neighborSize = neighbors.size();
-        //System.out.println(neighborSize);
+
         for(int i=neighborSize-1;i>=0;i--)
         {
-            MazeCell curNeighbor = neighbors.get((int)(i*Math.random()));
-            //System.out.println(curNeighbor.getPosX() + "," + curNeighbor.getPosY());
+            MazeCell curNeighbor = neighbors.get((int)((i+1)*Math.random()));
+
             if (curNeighbor != null && !visited.contains(curNeighbor))
             {
                 //detect where the neighbor is
@@ -67,43 +67,33 @@ public class MazeGenerator {
     }
 
     private static void generateField(int sizeX, int sizeY) {
-        MazeCell oldYCell = null;
-        MazeCell oldXCell = null;
         for (int i = 0; i < sizeX; i++) {
             for (int j = 0; j < sizeY; j++) {
                 // generate new cell with current position
                 MazeCell newCell = new MazeCell();
                 newCell.setPosX(i);
                 newCell.setPosY(j);
-                
-                // if old cell is not null add old cell as south
-                if (oldYCell != null) 
-                {
-                    newCell.setSouth(oldYCell);
-                    // old y cell has a left neighbor and this neighbor has 
-                    // a north node add this node as the left node of the 
-                    // new cell
-                    if (oldYCell.getWest() != null &&
-                            oldYCell.getWest().getNorth() != null) {
-                        newCell.setWest(oldYCell.getWest().getNorth());
-                    }
-                }
-                // if the old cell is a null the new cell is the newest cell 
-                // on x axxis range
-                else
-                {
-                    // check for an oldXCell
-                    if (oldXCell != null)
-                    {
-                        // if so add the oldXcell left of the newcell
-                        newCell.setWest(oldXCell);
-                    }
-                    // set the oldXCell to the new xCell
-                    oldXCell = newCell;
-                }
-                // add new cell to the maze
                 maze.add(newCell);
-                oldYCell= newCell;
+            }
+        }
+        
+        for (int i = 0; i < sizeX; i++) {
+            for (int j = 0; j < sizeY; j++) {
+            	
+            	MazeCell newCell = maze.get(i*sizeY + j);
+            	
+		        if (j != 0) {
+		        	newCell.setNorth(maze.get(i*sizeY + (j-1)));
+				}
+				if (j != sizeY - 1) {
+					newCell.setSouth(maze.get(i*sizeY + (j+1)));
+				}
+				if (i != 0) {
+					newCell.setWest(maze.get((i-1)*sizeY +j));
+				}
+				if (i != sizeX - 1) {
+					newCell.setEast(maze.get((i+1)*sizeY +j));
+				}
             }
         }
     }

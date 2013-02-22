@@ -1,19 +1,17 @@
 package de.nufag;
 
+import java.util.ArrayList;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
 
 import de.nufag.world.MazeCell;
 import de.nufag.world.MazeGenerator;
-
-import java.util.ArrayList;
 
 /**
  * test
@@ -30,23 +28,13 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+    	cam.setLocation(new Vector3f(10f, 10f, 26f));
         final ArrayList<MazeCell> maze = MazeGenerator.getMaze(20, 20);
-//        Line q = new Line(new Vector3f(0, 0, 0), new Vector3f(0,1,0));
-//        Geometry geom = new Geometry("Quad", q);
-//        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//        mat.setColor("Color", ColorRGBA.White);
-//        geom.setMaterial(mat);
-//        geom.move(2, 4, 0);
-//        rootNode.attachChild(geom);
+
         for (MazeCell mc: maze )
         {
-        	//TODO fill this with live   
-        	createBox(mc, ColorRGBA.Red);
-        	System.out.println("x: " + mc.getPosX() + " y: " + mc.getPosY());
-        	System.out.println("north: " + mc.isWallNorth());
-        	System.out.println("east: " + mc.isWallEast());
-        	System.out.println("south: " + mc.isWallSouth());
-        	System.out.println("west: " + mc.isWallWest());
+        	//TODO fill this with live
+        	createBox(mc, ColorRGBA.White);
         }
        
     }  
@@ -63,42 +51,58 @@ public class Main extends SimpleApplication {
 
     private void createBox(MazeCell mc, ColorRGBA color) {
     	
-    	ArrayList<Line> linesToAdd = new ArrayList<Line>();
+    	ArrayList<Geometry> linesToAdd = new ArrayList<Geometry>();
     	Quad q = new Quad(1, 1);
+    	
+    	//System.out.println(q.getHeight());
         Geometry geom = new Geometry("Quad", q);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);
         geom.setMaterial(mat);
-        geom.move(mc.getPosX(), mc.getPosY(), 0);
+        geom.move(mc.getPosX() + 0.33f, mc.getPosY() + 0.33f, 0);
         rootNode.attachChild(geom);
         if(mc.isWallEast()) {
-        	Line l = new Line(new Vector3f(mc.getPosX()+1, mc.getPosY(), 0), new Vector3f(mc.getPosX()+1,mc.getPosY()+1,0));
-        	linesToAdd.add(l);
+        	Quad tmp = new Quad(0.33f,1);
+        	Geometry g = new Geometry("Quad", tmp);
+            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            m.setColor("Color", ColorRGBA.DarkGray);
+            g.setMaterial(m);
+            g.move(mc.getPosX()+1, mc.getPosY(), 0);
+        	linesToAdd.add(g);
         }
         
         if(mc.isWallNorth()) {
-        	Line l = new Line(new Vector3f(mc.getPosX(),mc.getPosY(),0), new Vector3f(mc.getPosX()+1,mc.getPosY(),0));
-        	linesToAdd.add(l);
+        	Quad tmp = new Quad(1,0.33f);
+        	Geometry g = new Geometry("Quad", tmp);
+            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            m.setColor("Color", ColorRGBA.DarkGray);
+            g.setMaterial(m);
+            g.move(mc.getPosX(), mc.getPosY(), 0);
+        	linesToAdd.add(g);
         }
         
         if(mc.isWallSouth()) {
-        	Line l = new Line(new Vector3f(mc.getPosX(),mc.getPosY()+1,0), new Vector3f(mc.getPosX()+1,mc.getPosY()+1,0));
-        	linesToAdd.add(l);
+        	Quad tmp = new Quad(1,0.33f);
+        	Geometry g = new Geometry("Quad", tmp);
+            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            m.setColor("Color", ColorRGBA.DarkGray);
+            g.setMaterial(m);
+            g.move(mc.getPosX(), mc.getPosY()+1, 0);
+        	linesToAdd.add(g);
         }
         
         if(mc.isWallWest()) {
-        	Line l = new Line(new Vector3f(mc.getPosX(), mc.getPosY(), 0), new Vector3f(mc.getPosX(),mc.getPosY()+1,0));
-        	System.out.println(l.getStart().toString());
-        	System.out.println(l.getEnd().toString());
-        	linesToAdd.add(l);
+        	Quad tmp = new Quad(0.33f,1);
+        	Geometry g = new Geometry("Quad", tmp);
+            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            m.setColor("Color", ColorRGBA.DarkGray);
+            g.setMaterial(m);
+            g.move(mc.getPosX(), mc.getPosY(), 0);
+        	linesToAdd.add(g);
         }
         
-        for(Line l : linesToAdd) {
-        	Geometry g = new Geometry("Line", l);
-        	Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        	m.setColor("Color", ColorRGBA.White);
-            g.setMaterial(m);
-            rootNode.attachChild(g);
+        for(Geometry l : linesToAdd) {
+            rootNode.attachChild(l);
         }
     }
 

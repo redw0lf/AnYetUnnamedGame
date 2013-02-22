@@ -49,6 +49,7 @@ public class MazeCell {
         wallEast = true;
         wallSouth = true;
         wallWest = true;
+        exit = false;
     }
     public List<MazeCell> getNeighbors() {    
         ArrayList<MazeCell> neighbors = new ArrayList<MazeCell>();
